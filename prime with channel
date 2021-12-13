@@ -1,0 +1,52 @@
+package main
+
+import (
+	"fmt"
+)
+
+func CheckPrime(number int, c chan string) {
+
+	isPrime := true
+	if number == 0 || number == 1 {
+		fmt.Printf(" %d is not a  prime number\n", number)
+	} else {
+		for i := 2; i <= number/2; i++ {
+			if number%i == 0 {
+				fmt.Printf(" %d is not a  prime number\n", number)
+				isPrime = false
+				break
+			}
+		}
+		if isPrime == true {
+			fmt.Printf(" %d is a prime number\n", number)
+		}
+	}
+	c <- "completed"
+
+}
+
+func main() {
+	//var number []int
+	var n, m int
+	fmt.Println("enter the limit")
+	fmt.Scanln(&n)
+	//var number []int
+	fmt.Print("Enter Number To check Prime:")
+	var number = make([]int, 0, n)
+	for i := 0; i < n; i++ {
+
+		fmt.Scan(&m)
+		number = append(number, m)
+
+	}
+	c := make(chan string)
+
+	v := <-c
+	fmt.Println(v)
+
+	for j := 0; j < len(number); j++ {
+
+		go CheckPrime(number[j], c)
+	}
+
+}
