@@ -1,0 +1,48 @@
+package main
+
+import (
+	"fmt"
+	"sort"
+	"time"
+)
+
+func CheckEvenOdd(a int, c chan int, i int, n int) {
+	if a&1 != 0 {
+		for j := 0; j < n; j++ {
+			time.Sleep(time.Second)
+		}
+		time.Sleep(5 * time.Second)
+		for j := 0; j <= i; j++ {
+			time.Sleep(time.Second)
+		}
+		c <- a
+
+	} else {
+		for j := 0; j <= i; j++ {
+			time.Sleep(time.Second)
+		}
+		c <- a
+
+	}
+}
+
+func main() {
+	var n, m int
+	fmt.Println("Enter the limit")
+	fmt.Scan(&n)
+	num := make([]int, 0, n)
+	fmt.Println("Enter numbers")
+	for i := 0; i < n; i++ {
+		fmt.Scan(&m)
+		num = append(num, m)
+	}
+	c := make(chan int)
+	sort.Ints(num)
+	for i, a := range num {
+		go CheckEvenOdd(a, c, i, n)
+	}
+	fmt.Println("Sorted even and odd")
+	for i := 0; i < n; i++ {
+		fmt.Println(<-c)
+	}
+}
